@@ -1,2 +1,2 @@
-# aps-algoritmos-estrutura-dados
-APS do 4º semestre - Algoritmos de Estruturação de Dados
+# aps-algoritmos-ordenacao-dados
+APS do 4º semestre - Algoritmos de Ordenação de Dados
