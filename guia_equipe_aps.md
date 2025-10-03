@@ -78,24 +78,17 @@ Prefira commits pequenos (1 responsabilidade por commit).
 
 ## ✅ Política de merge
 
-* O líder revisa e aprova PRs. Pode delegar revisão a outro membro.
+* Revisa e delegar revisão a outro membro.
 * Só faça merge quando a checklist estiver OK.
-
----
-
-## 🐞 Issues e Organização de Tarefas
-
-* Crie uma **Issue** para cada tarefa (ex: "Implementar busca binária").
-* Use labels (ex: `bug`, `feat`, `docs`) e atribua um responsável.
 
 ---
 
 ## 💬 Boas práticas de equipe
 
 * Faça `git pull` antes de começar a trabalhar no dia.
-* Comunique impedimentos no PR ou na issue.
+* Comunique impedimentos.
 * Comente e explique código se a lógica não for trivial.
-* Respeite revisões: aceite feedbacks e atualize o PR.
+* Respeite revisões: aceite feedbacks.
 
 ---
 
@@ -132,14 +125,6 @@ git marge origin/main
 * `feature/ordenacao-merge`
 * `fix/caso-borda-insercao`
 * `docs/readme-exemplos`
-
----
-
-## 🧑‍💻 Papéis e responsabilidades (sugestão)
-
-* **Líder (Nicolas):** revisão final, merges, gerenciamento de issues e organização.
-* **Membros:** desenvolver features, abrir PRs, corrigir pontos apontados nas reviews.
-
 ---
 
 ## 🧭 Controle de Mudanças — políticas práticas (detalhado)
