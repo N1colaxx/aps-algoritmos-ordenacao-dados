@@ -1,29 +1,78 @@
 # imports
 import os
 import sys
-import importlib # permite importe importar modulos dinamicamente em tempo de execução
+import importlib
+import time
 from pathlib import Path
+import pandas as pd
+import matplotlib.pyplot as plt
+from datetime import datetime
 
-BASE_DIR = Path(__file__).resolve().parents[1] # cria um caminho absoluto para a "origem" do progeto: aps_algotimos_estrutura_dados
-SCRIPTS_DIR = BASE_DIR / "scripts" # acessa o PATH da pasta scripts 
-sys.path.insert(0, str(SCRIPTS_DIR)) # aqui deixo o PATH da pasta scripts como prioridade, assim quando alguem requisitar um moduli, ja vai direto nela
+BASE_DIR = Path(__file__).resolve().parents[1]
+SCRIPTS_DIR = BASE_DIR / "scripts"
+RESULTS_FILE = BASE_DIR / "resultados.xlsx"
+GRAFICO_FILE = BASE_DIR / "grafico_medias.png"
+
+sys.path.insert(0, str(SCRIPTS_DIR))
 
 AVAILABLE = {
-#   opc |    script | aparace para o USER
     "1": ("quicksort", "QuickSort"),
     "2": ("mergesort", "MergeSort"),
     "3": ("heapsort", "HeapSort")
 }
 
+
+def salvar_resultado_excel(algoritmo: str, tempo_execucao: float):
+    """Salva o tempo no Excel e atualiza o gráfico de médias."""
+    dados = {
+        "Algoritmo": [algoritmo],
+        "Tempo (s)": [tempo_execucao],
+        "Data/Hora": [datetime.now().strftime("%d/%m/%Y %H:%M:%S")]
+    }
+
+    df_novo = pd.DataFrame(dados)
+
+    if RESULTS_FILE.exists():
+        df_existente = pd.read_excel(RESULTS_FILE)
+        df_final = pd.concat([df_existente, df_novo], ignore_index=True)
+    else:
+        df_final = df_novo
+
+    df_final.to_excel(RESULTS_FILE, index=False)
+
+    print(f"📊 Resultado salvo em: {RESULTS_FILE.name}")
+    gerar_grafico_medias(df_final)
+
+def gerar_grafico_medias(df):
+    """Gera e salva um gráfico de médias de tempo de cada algoritmo."""
+    medias = df.groupby("Algoritmo")["Tempo (s)"].mean().sort_values()
+
+    plt.figure(figsize=(7, 5))
+    barras = plt.bar(medias.index, medias.values, color='black')
+
+    plt.title("Tempo médio das execuções", fontsize=15)
+    plt.ylabel("Tempo médio (segundos)")
+    plt.xlabel("Algoritmo")
+
+    # Adiciona os valores acima das barras
+    for barra in barras:
+        plt.text(barra.get_x() + barra.get_width()/2,
+                 barra.get_height(),
+                 f"{barra.get_height():.4f}s",
+                 ha='center', va='bottom',
+                 color='black', fontsize=9, fontweight='bold')  
+
+    plt.tight_layout()
+    plt.savefig(GRAFICO_FILE)
+    plt.close()
+    print(f"📈 Gráfico de médias atualizado: {GRAFICO_FILE.name}")
+
+
 def run_script(option: str):
     if option not in AVAILABLE:
         print("⚠️ Opção inválida.")
         return
-    
-    # module_name -> script que vai executar
-    # label -> o nome do script q vai executar
-    # AVAILABLE -> as opcões de algoritmos
-    # option -> armazena a opcão que digitou  
+
     module_name, label = AVAILABLE[option]
 
     try:
@@ -37,10 +86,20 @@ def run_script(option: str):
         return
 
     print(f"\n--- {label} ---")
+
     try:
+        inicio = time.perf_counter()
         module.run()
+        fim = time.perf_counter()
+
+        tempo_exec = fim - inicio
+        print(f"✅ Tempo de execução: {tempo_exec:.6f} segundos")
+
+        salvar_resultado_excel(label, tempo_exec)
+
     except Exception as e:
         print(f"❌ Erro durante a execução: {e}")
+
 
 def main():
     while True:
@@ -60,6 +119,7 @@ def main():
             continue
 
         run_script(opc)
+
 
 if __name__ == "__main__":
     main()
