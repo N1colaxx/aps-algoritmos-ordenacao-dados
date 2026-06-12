@@ -23,9 +23,9 @@ APS do 4º semestre - Algoritmos de Ordenação de Dados
     <br>
 
 2. Utilizar **3 algorimos diferentes** para efetuar a ordenação dos dados.
-    -   1. 
-    -   2. 
-    -   3. 
+    -   1.    **Heapsort**
+    -   2.    **Mergesort**
+    -   3.    **Quicksort**
 
     ---
     <br>
